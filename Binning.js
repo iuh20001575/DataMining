@@ -8,15 +8,21 @@ function equalWidth(data, numBins) {
     });
 
     var binWidth = Math.floor((max - min) / numBins);
+    var x0 = min,
+        x1 = min + binWidth;
     var bins = new Array(numBins)
         .fill(null)
         .map((i, index) => index)
         .map(function (i) {
-            return {
-                x0: min + i * binWidth,
-                x1: min + (i + 1) * binWidth,
+            var obj = {
+                x0,
+                x1,
                 item: [],
             };
+
+            x0 = x1 + 1;
+            x1 = x0 + binWidth;
+            return obj;
         });
     data.forEach((item) => {
         bins.forEach((bin) => {
@@ -80,7 +86,7 @@ function equalDepth(data, numBins) {
         }
     });
 
-    console.log('\nEqual-Width');
+    console.log('\nEqual-Depth');
     bins.forEach((bin, index) =>
         console.log(`Bin ${index + 1}: ${bin.join(', ')}`),
     );

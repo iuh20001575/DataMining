@@ -29,7 +29,7 @@ function zScoreNormalize(dataSet) {
     mean /= dataSet.length;
 
     dataSet.forEach((i) => (std += Math.pow(i - mean, 2)));
-    std = Math.sqrt(std / dataSet.length);
+    std = Math.sqrt(std / (dataSet.length - 1));
 
     dataSet.forEach((i) =>
         normalizedDataSet.push(((i - mean) / std).toFixed(2)),
@@ -46,7 +46,16 @@ function decimalScalingNormalize(dataSet) {
         if (i > max) max = i;
     });
 
-    dataSet.forEach((i) => normalizedDataSet.push((i / max).toFixed(2)));
+    let j = 0;
+    while (max > 0) {
+        j++;
+        max /= 10;
+        max = Number.parseInt(max);
+    }
+
+    dataSet.forEach((i) =>
+        normalizedDataSet.push((i / Math.pow(10, j)).toFixed(2)),
+    );
 
     return normalizedDataSet;
 }
@@ -55,13 +64,16 @@ const dataSet = new Array(10)
     .fill(0)
     .map(() => Math.floor(Math.random() * 100));
 
-console.log('🚀 ~ dataSet:', dataSet);
+console.log('🚀 ~ dataSet:', dataSet.join(', '));
 console.log(
     '\n🚀 ~ minMaxNormalize(dataSet, 2, 3):',
-    minMaxNormalize(dataSet, 2, 3),
+    minMaxNormalize(dataSet, 2, 3).join(', '),
 );
-console.log('\n🚀 ~ zScoreNormalize(dataSet):', zScoreNormalize(dataSet));
+console.log(
+    '\n🚀 ~ zScoreNormalize(dataSet):',
+    zScoreNormalize(dataSet).join(', '),
+);
 console.log(
     '\n🚀 ~ decimalScalingNormalize(dataSet):',
-    decimalScalingNormalize(dataSet),
+    decimalScalingNormalize(dataSet).join(', '),
 );
